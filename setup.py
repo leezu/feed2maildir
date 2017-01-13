@@ -15,7 +15,6 @@ setup(name='feed2maildir',
       author_email='sulami@peerwire.org',
       license='ISC',
       packages=['feed2maildir'],
-      test_suite = 'feed2maildir.tests',
       zip_safe=False,
       install_requires=[
           'feedparser>=5.1.3',
