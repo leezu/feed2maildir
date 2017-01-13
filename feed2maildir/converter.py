@@ -4,6 +4,7 @@ import json
 import os
 import random
 import sys
+import time
 
 if sys.version[0] == '2':
     from HTMLParser import HTMLParser
@@ -178,7 +179,7 @@ Link: {}
                     print "WARNING: couldn't find {} in {}".format(
                         messagefile,
                         self.name)
-            sleep(1)
+            time.sleep(1)
         return list(set(hashes))
 
     def compose(self, post):
