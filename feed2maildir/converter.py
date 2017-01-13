@@ -93,7 +93,7 @@ Link: {}
 
     def find_new(self, feed, hashes):
         """Find the new posts by comparing them to the found hashes"""
-        new      = []
+        new = []
 
         for post in feed.entries:
             # See if we've already got a message for this item
@@ -149,14 +149,37 @@ Link: {}
                     sys.exit('ERROR: accessing "{}" failed'.format(fullname))
 
         hashes = []
-        for folder, subs, files in os.walk(maildir):
-            for filename in files:
-                with open(os.path.join(folder, filename), 'r') as message:
-                    found = [l for l in message.readlines()
-                             if l.startswith('X-feed2maildirsimple-hash')]
-                    if found != []:
-                        hashes.append(found[0].split(' ')[1])
-        return hashes
+        # Run a few times, to reduce the chance of missing something
+        for iteration in [0, 1, 2]:
+            # Look up all message filenames. These won't change, but they
+            # may be moved from 'new' to 'cur' while we're running.
+            messages = []
+            for subdir in ['new', 'cur']:
+                messages += os.listdir(os.path.join(maildir, subdir))
+            for messagefile in list(set(messages)):
+                # Look up the location of each message on demand, to prevent
+                # our listings going stale
+                foundfile = False
+                for subdir in ['new', 'cur']:
+                    try:
+                        with open(os.path.join(maildir,
+                                               subdir,
+                                               messagefile),
+                                  'r') as message:
+                            foundfile = True
+                            found = [l for l in message.readlines()
+                                     if l.startswith('X-feed2maildirsimple-hash')]
+                            if found != []:
+                                hashes.append(found[0].split(' ')[1])
+                    except IOError:
+                        # We only expect one to be found
+                        pass
+                if not foundfile:
+                    print "WARNING: couldn't find {} in {}".format(
+                        messagefile,
+                        self.name)
+            sleep 1
+        return list(set(hashes))
 
     def compose(self, post):
         """Compose the mail using the tempate"""
