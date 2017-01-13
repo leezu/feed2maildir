@@ -3,27 +3,23 @@ Feed2Maildir
 
 Read RSS/Atom feeds in your favourite, maildir-compatible email client.
 
-.. image:: https://img.shields.io/pypi/v/feed2maildir.svg?style=flat-square
-    :target: https://pypi.python.org/pypi/feed2maildir
+[![image]]
 
-.. image:: https://img.shields.io/pypi/dm/feed2maildir.svg?style=flat-square
-    :target: https://pypi.python.org/pypi/feed2maildir
+[![image][1]][![image]]
 
 Requirements
 ------------
 
-- Python 2.7+ / 3.2+
-- ``feedparser``
-- ``python-dateutil``
+-   Python 2.7+ / 3.2+
+-   `feedparser`
+-   `python-dateutil`
 
 Usage
 -----
 
-Just run ``feed2maildir``, which should be placed in your $PATH by setup.py.
-You will need a JSON configuration file at ``$HOME/.f2mrc`` that looks like
-this:
-
-.. code-block:: json
+Just run `feed2maildir`, which should be placed in your $PATH by
+setup.py. You will need a JSON configuration file at `$HOME/.f2mrc` that
+looks like this:
 
     {
         "db": "~/.f2mdb",
@@ -38,12 +34,11 @@ this:
         }
     }
 
-Note that the last element in a dict must not be followed by a comma, because
-Python's json.loads() says so.
+Note that the last element in a dict must not be followed by a comma,
+because Python’s json.loads() says so.
 
-There are a bunch of command-line arguments to overwrite the config file:
-
-::
+There are a bunch of command-line arguments to overwrite the config
+file:
 
     optional arguments:
         -h, --help  show this help message and exit
@@ -53,6 +48,9 @@ There are a bunch of command-line arguments to overwrite the config file:
         -s          strip HTML from the feeds
         -l          just write the links without the update
 
-To check for updates regularly, just toss it into cron to run once every hour
-or so.
+To check for updates regularly, just toss it into cron to run once every
+hour or so.
 
+  [image]: https://img.shields.io/pypi/v/feed2maildir.svg?style=flat-square
+  [![image]]: https://pypi.python.org/pypi/feed2maildir
+  [1]: https://img.shields.io/pypi/dm/feed2maildir.svg?style=flat-square
