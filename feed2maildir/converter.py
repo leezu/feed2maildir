@@ -178,7 +178,7 @@ Link: {}
                     print "WARNING: couldn't find {} in {}".format(
                         messagefile,
                         self.name)
-            sleep 1
+            sleep(1)
         return list(set(hashes))
 
     def compose(self, post):
