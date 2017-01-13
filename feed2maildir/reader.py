@@ -1,19 +1,18 @@
 import feedparser
 
 class Reader:
-    """Get updates on the feeds supplied"""
+    """Get updates on the supplied feed"""
 
-    def __init__(self, feeds, silent=False):
-        self.feeds = []
+    def __init__(self, feed, silent=False):
+        self.feed   = None
         self.silent = silent
-        for feed in feeds:
-            f = feedparser.parse(feeds[feed])
-            if f.bozo:
-                self.output('WARNING: could not parse feed {}'.format(feed))
-            else:
-                self.feeds.append(f)
+
+        f = feedparser.parse(feed)
+        if f.bozo:
+            raise Exception('Could not parse feed')
+        else:
+            self.feed = f
 
     def output(self, arg):
         if not self.silent:
             print(arg)
-

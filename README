@@ -1,11 +1,9 @@
-Feed2Maildir
+Feed2MaildirSimple
 ============
 
 Read RSS/Atom feeds in your favourite, maildir-compatible email client.
 
-[![image]]
-
-[![image][1]][![image]]
+A simplified fork of Feed2Maildir, which doesn't use config files or databases.
 
 Requirements
 ------------
@@ -17,40 +15,24 @@ Requirements
 Usage
 -----
 
-Just run `feed2maildir`, which should be placed in your $PATH by
-setup.py. You will need a JSON configuration file at `$HOME/.f2mrc` that
-looks like this:
+Run the `feed2maildir` command. The content of the feed should be sent into the
+command's standard input; if the feed is online, you might want to use `curl` or
+`wget` to fetch it. The following options are available:
 
-    {
-        "db": "~/.f2mdb",
-        "maildir": "~/mail/feeds",
-        "feeds": {
-            "Coding Horror": "http://feeds.feedburner.com/codinghorror/",
-            "Commit Strip": "http://www.commitstrip.com/en/feed/",
-            "XKCD": "http://xkcd.com/rss.xml",
-            "What If?": "http://what-if.xkcd.com/feed.atom",
-            "Dilbert": "http://feed.dilbert.com/dilbert/daily_strip?format=xml",
-            "BSDNow": "http://feeds.feedburner.com/BsdNowOgg"
-        }
-    }
+    -h, --help  show this help message and exit (optional)
+    -m <dir>    maildir location
+    -n <name>   name to use for this feed
+    -s          strip HTML from the feeds (optional)
 
-Note that the last element in a dict must not be followed by a comma,
-because Python’s json.loads() says so.
+To convert a feed, the `-m` and `-n` options are required. Only a single feed
+will be processed at a time; if you want to process multiple feeds, invoke the
+command inside a loop.
 
-There are a bunch of command-line arguments to overwrite the config
-file:
+To prevent the same items being added over and over, each generated maildir
+entry is given an extra header `X-feed2maildirsimple-hash`, which stores the
+given feed name and some stable identifiers from the item. Before creating a new
+message, the given maildir is scanned for existing hashes, and the item is
+skipped if a corresponding message already exists.
 
-    optional arguments:
-        -h, --help  show this help message and exit
-        -c <file>   override the config file location (~/.f2mrc)
-        -d <file>   override the database file location (~/.f2mdb)
-        -m <dir>    override the maildir location (None)
-        -s          strip HTML from the feeds
-        -l          just write the links without the update
-
-To check for updates regularly, just toss it into cron to run once every
-hour or so.
-
-  [image]: https://img.shields.io/pypi/v/feed2maildir.svg?style=flat-square
-  [![image]]: https://pypi.python.org/pypi/feed2maildir
-  [1]: https://img.shields.io/pypi/dm/feed2maildir.svg?style=flat-square
+Once the process has finished, no further work will be performed. If you want to
+fetch updates at regular intervals, run the command via a system like `cron`.

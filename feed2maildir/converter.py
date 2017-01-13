@@ -1,4 +1,5 @@
 import datetime
+import hashlib
 import json
 import os
 import random
@@ -56,117 +57,85 @@ class HTMLStripper(HTMLParser):
         return out
 
 class Converter:
-    """Compares the already parsed feeds and converts new ones to maildir"""
+    """Converts new entries to maildir"""
 
     TEMPLATE = u"""MIME-Version: 1.0
 Date: {}
 Subject: {}
 From: {}
 Content-Type: text/plain
+X-feed2maildirsimple-hash: {}
 
-[Feed2Maildir] Read the update here:
-{}
+Link: {}
 
 {}
 """
 
-    def __init__(self, db='~/.f2mdb', maildir='~/mail/feeds', strip=False,
-                 links=False, silent=False):
-        self.silent = silent
+    def __init__(self, maildir, name, strip=False, silent=False):
+        self.name    = name
+        self.silent  = silent
         self.maildir = os.path.expanduser(maildir)
-        self.db = os.path.expanduser(db)
-        self.links = links
-        self.strip = strip
+        self.strip   = strip
         if self.strip:
             self.stripper = HTMLStripper()
 
-        try: # to read the database
-            with open(self.db, 'r') as f:
-                self.dbdata = json.loads(f.read())
-        except FileNotFoundError:
-            self.dbdata = None
-        except ValueError:
-            self.output('WARNING: database is malformed and will be ignored')
-            self.dbdata = None
-
     def run(self):
         """Do a full run"""
-        if self.feeds:
-            self.check_maildir(self.maildir)
-            self.news = self.find_new(self.feeds, self.dbdata)
-            for newfeed, posts in self.news.items():
-                for newpost in posts:
-                    self.write(self.compose(newfeed, newpost))
+        if self.feed:
+            hashes = self.check_maildir(self.maildir)
+            self.news = self.find_new(self.feed, hashes)
+            for newpost in self.news:
+                self.write(self.compose(newpost))
 
-    def load(self, feeds):
-        """Load a list of feeds in feedparser-dict form"""
-        self.feeds = feeds
+    def load(self, feed):
+        """Load a feed"""
+        self.feed = feed
 
-    def find_new(self, feeds, db, writedb=True, dbfile=None):
-        """Find the new posts by comparing them to the db, by default
-        refreshing the db"""
-        new = {}
-        newtimes = {}
-        for feed in feeds:
-            feedname = feed.feed.title
-            try: # to get the update time from the feed itself
-                feedup = self.mktime(feed.feed.updated)
-            except: # there is no info, then find it in the posts
-                feedup = self.find_update_time(feed)
-            try: # to localize the timezone
-                feedup = feedup.astimezone(dateutil.tz.tzutc())
-            except: # it is naive, force UTC
-                feedup = feedup.replace(tzinfo=dateutil.tz.tzutc())
-            try: # to find the old update time in the db
-                oldtime = self.mktime(db[feedname]).astimezone(
-                            dateutil.tz.tzutc())
-            except: # it is not there
-                oldtime = None
-            if oldtime and not oldtime.tzinfo: # force UTC
-                oldtime = oldtime.replace(tzinfo=dateutil.tz.tzutc())
-            # print(feedname, feedup.tzinfo)
-            if not oldtime or oldtime < feedup:
-                for post in feed.entries:
-                    feedtime = self.post_update_time(post)
-                    try: # to localize the timezone
-                        feedtime = feedtime.astimezone(dateutil.tz.tzutc())
-                    except: # it is naive
-                        feedtime = feedtime.replace(tzinfo=dateutil.tz.tzutc())
-                    if not oldtime or oldtime < feedtime:
-                        try: # to append the post the the feed-list
-                            new[feedname].append(post)
-                        except: # it is the first one, make a new list
-                            new[feedname] = [post, ]
-            if writedb:
-                newtimes[feedname] = feedup.strftime('%Y-%m-%d %H:%M:%S %Z')
+    def find_new(self, feed, hashes):
+        """Find the new posts by comparing them to the found hashes"""
+        new      = []
 
-        if writedb:
-            if not dbfile: # use own dbfile as default
-                dbfile = self.db
-            try: # to write the new database
-                with open(dbfile, 'w') as f:
-                    f.write(json.dumps(newtimes))
-            except:
-                self.output('WARNING: failed to write the new database')
-
+        for post in feed.entries:
+            # See if we've already got a message for this item
+            h       = self.make_hash(post)
+            matches = [x for x in hashes if self.hashes_match(h, x)]
+            if matches == []:
+                new.append(post)
         return new
 
-    def post_update_time(self, post):
-        """Try to get the post time"""
-        try:
-            return self.mktime(post.updated)
-        except AttributeError:
-            try:
-                return self.mktime(post.published)
-            except AttributeError: # last resort
-                return datetime.datetime.now()
+    def hashes_match(self, x, y):
+        """Check if the data in two hashes match"""
+        x_bits = [bit.split("PES") for bit in x.split("SEP")]
+        y_bits = [bit.split("PES") for bit in y.split("SEP")]
 
-    def find_update_time(self, feed):
-        """Find the last updated post in a feed"""
-        times = []
-        for post in feed.entries:
-            times.append(self.post_update_time(post))
-        return sorted(times)[-1]
+        x_data = {}
+        for k, v in x_bits:
+            x_data[k] = v.strip()
+        y_data = {}
+        for k, v in y_bits:
+            y_data[k] = v.strip()
+
+        mismatch = False
+        for k in x_data:
+            if k in y_data:
+                if x_data[k] != y_data[k]:
+                    mismatch = True
+        for k in y_data:
+            if k in x_data:
+                if x_data[k] != y_data[k]:
+                    mismatch = True
+
+        return (not mismatch)
+
+    def make_hash(self, post):
+        """Make an identifying hash for this post"""
+        data = {"feed": self.name}
+        for k in ["id", "title", "ppg_canonical", "link", "author"]:
+            if k in post:
+                h = hashlib.sha256()
+                h.update(post[k])
+                data[k] = h.hexdigest()
+        return "SEP".join([k + "PES" + data[k] for k in sorted(data.keys())])
 
     def check_maildir(self, maildir):
         """Check access to the maildir and try to create it if not present"""
@@ -179,21 +148,30 @@ Content-Type: text/plain
                 except:
                     sys.exit('ERROR: accessing "{}" failed'.format(fullname))
 
-    def compose(self, title, post):
+        hashes = []
+        for folder, subs, files in os.walk(maildir):
+            for filename in files:
+                with open(os.path.join(folder, filename), 'r') as message:
+                    found = [l for l in message.readlines()
+                             if l.startswith('X-feed2maildirsimple-hash')]
+                    if found != []:
+                        hashes.append(found[0].split(' ')[1])
+        return hashes
+
+    def compose(self, post):
         """Compose the mail using the tempate"""
         try: # to get the update/publish time from the post
             updated = post.updated
         except: # the property is not set, use now()
             updated = datetime.datetime.now()
         desc = ''
-        if not self.links:
-            if self.strip:
-                self.stripper.feed(post.description)
-                desc = stripper.get_data()
-            else:
-                desc = post.description
-        return self.TEMPLATE.format(updated, post.title, title, post.link,
-                                    desc)
+        if self.strip:
+            self.stripper.feed(post.description)
+            desc = stripper.get_data()
+        else:
+            desc = post.description
+        return self.TEMPLATE.format(updated, post.title, self.name,
+                                    self.make_hash(post), post.link, desc)
 
     def write(self, message):
         """Take a message and write it to a mail"""
@@ -219,4 +197,3 @@ Content-Type: text/plain
     def output(self, arg):
         if not self.silent:
             print(arg)
-

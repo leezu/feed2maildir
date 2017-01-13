@@ -3,7 +3,7 @@ from setuptools import setup
 import feed2maildir
 
 def readme():
-    with open('README.rst') as f:
+    with open('README') as f:
         return f.read()
 
 setup(name='feed2maildir',
@@ -35,4 +35,3 @@ setup(name='feed2maildir',
           'Topic :: Utilities',
       ]
       )
-
