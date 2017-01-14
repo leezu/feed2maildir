@@ -1,19 +1,16 @@
-Feed2MaildirSimple
-============
+# Feed2MaildirSimple #
 
 Read RSS/Atom feeds in your favourite, maildir-compatible email client.
 
 A simplified fork of Feed2Maildir, which doesn't use config files or databases.
 
-Requirements
-------------
+## Requirements ##
 
 -   Python 2.7+ / 3.2+
 -   `feedparser`
 -   `python-dateutil`
 
-Usage
------
+## Usage ##
 
 Run the `feed2maildir` command. The content of the feed should be sent into the
 command's standard input; if the feed is online, you might want to use `curl` or
