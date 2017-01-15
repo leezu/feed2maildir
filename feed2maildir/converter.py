@@ -77,8 +77,6 @@ Link: {}
         self.silent  = silent
         self.maildir = os.path.expanduser(maildir)
         self.strip   = strip
-        if self.strip:
-            self.stripper = HTMLStripper()
 
     def run(self):
         """Do a full run"""
@@ -190,8 +188,9 @@ Link: {}
             updated = datetime.datetime.now()
         desc = ''
         if self.strip:
-            self.stripper.feed(post.description)
-            desc = self.stripper.get_data()
+            stripper = HTMLStripper()
+            stripper.feed(post.description)
+            desc = stripper.get_data()
         else:
             desc = post.description
         return self.TEMPLATE.format(updated, post.title, self.name,
