@@ -29,7 +29,10 @@ def main():
     else:
         raise Exception("No feed name given")
 
-    reader = Reader(sys.stdin.read())
+    if sys.version[0] == '2':
+        reader = Reader(sys.stdin.read())
+    else:
+        reader = Reader(sys.stdin.buffer.read())
 
     converter = Converter(maildir, name, strip=args['s'])
     converter.load(reader.feed)
