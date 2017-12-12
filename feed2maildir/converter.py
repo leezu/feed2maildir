@@ -133,7 +133,10 @@ Link: {}
         for k in ["id", "title", "ppg_canonical", "link", "author"]:
             if k in post:
                 h = hashlib.sha256()
-                h.update(post[k])
+                if sys.version[0] == '2':
+                    h.update(post[k])
+                else:
+                    h.update(post[k].encode('utf8'))
                 data[k] = h.hexdigest()
         return "SEP".join([k + "PES" + data[k] for k in sorted(data.keys())])
 
