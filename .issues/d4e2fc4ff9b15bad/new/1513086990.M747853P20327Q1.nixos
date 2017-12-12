@@ -1,0 +1,9 @@
+From: Chris Warburton
+Date: Tue, 12 Dec 2017 13:56:12 +0000
+Subject: Re: Fix python3 unicode issues
+Message-Id: <d4e2fc4ff9b15bad-a34211f93f19ca7e-artemis@nixos>
+References: <d4e2fc4ff9b15bad-0-artemis@nixos>
+In-Reply-To: <d4e2fc4ff9b15bad-0-artemis@nixos>
+
+Thanks for this. I haven't tested on Python 3, but these changes are
+minor and look perfectly reasonable.

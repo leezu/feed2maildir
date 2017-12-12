@@ -1,0 +1,17 @@
+From: sarg <sarg@github.com>
+Date: Tue, 11 Dec 2017 18:00:00 +0000
+State: resolved
+Subject: Fix python3 unicode issues
+Message-Id: <d4e2fc4ff9b15bad-0-artemis@nixos>
+resolution: fixed
+
+Hi there. You've got nice workflow with managing rss feeds and I would
+like to reproduce it. I've ran into minor issues with python3 and
+unicode and was able to resolve them myself. Please take a look.
+
+Note that this issue is copypasta from GitHub:
+
+  https://github.com/Warbo/feed2maildir/pull/1
+
+The relevant commit is a20179ba533c35cce3f94be2b979995a941aefc5 which
+has now been merged.
