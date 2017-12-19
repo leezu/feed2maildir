@@ -53,7 +53,7 @@ class HTMLStripper(HTMLParser):
         out = ''.join(self.fed)
         if self.numlinks:
             out += '\n'
-            for l in range(self.numlinks):
+            for l in sorted(self.links.keys()):
                 out += '  [{}]: {}\n'.format(l, self.links[l])
         return out
 
