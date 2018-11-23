@@ -77,6 +77,7 @@ Link: {}
         self.silent  = silent
         self.maildir = os.path.expanduser(maildir)
         self.strip   = strip
+        self.delivered = 0
 
     def run(self):
         """Do a full run"""
@@ -185,7 +186,7 @@ Link: {}
         try: # to get the update/publish time from the post
             updated = post.updated
         except: # the property is not set, use now()
-            updated = datetime.datetime.now()
+            updated = time.strftime("%a, %d %b %Y %H:%M:%S +0000", time.gmtime())
         desc = ''
         if self.strip:
             stripper = HTMLStripper()
@@ -198,11 +199,13 @@ Link: {}
 
     def write(self, message):
         """Take a message and write it to a mail"""
-        rand = str(random.randint(10000, 99999))
-        dt = str(datetime.datetime.now())
+        rand = random.randint(0,0xFFFFFFFF)
+        dt = time.time()
+        ticks = int((dt - int(dt)) * 1000000)
         pid = str(os.getpid())
         host = os.uname()[1]
-        name = u'{}/new/{}{}{}{}'.format(self.maildir, rand, dt, pid, host)
+        self.delivered += 1
+        name = u'{}/new/{}.M{}R{:08x}Q{}P{}.{}'.format(self.maildir, int(dt), ticks, rand, self.delivered, pid, host)
         try: # to write out the message
             with open(name, 'w') as f:
                 # We can thank the P2/P3 unicode madness for this...
