@@ -1,0 +1,207 @@
+From: Billy Brumley <notifications@github.com>
+Date: Fri, 23 Nov 2018 11:58:37 -0800
+State: new
+Subject: [Warbo/feed2maildir] RFC5322 date in email header. Better maildir
+ naming conformance. (#2)
+Mime-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="--==_mimepart_5bf85bed59464_3d133fb6898d45bc19371a";
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-Id: <99c47dba979cc8e0-0-artemis@nixos>
+
+----==_mimepart_5bf85bed59464_3d133fb6898d45bc19371a
+Content-Type: text/plain;
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+My email client (alpine) did not like the dates in these resulting emails.
+
+So the first thing I did was go check what the maildir files contained.
+
+Right off, and even before looking into the file contents, I noticed the maildir file names were not really consistent with the [maildir recommendation](https://cr.yp.to/proto/maildir.html). So I changed that.
+
+But it didn't fix it. Then looking at the file contents, the email date header wasn't [RFC complient](https://tools.ietf.org/html/rfc5322#section-3.3). So I changed that, and it fixed it.
+
+PS love the fork. Nice and modular :) Thanks!
+You can view, comment on, or merge this pull request online at:
+
+  https://github.com/Warbo/feed2maildir/pull/2
+
+-- Commit Summary --
+
+  * [feed2maildir] RFC5322 date in email header. Better maildir naming conformance.
+
+-- File Changes --
+
+    M feed2maildir/converter.py (11)
+
+-- Patch Links --
+
+https://github.com/Warbo/feed2maildir/pull/2.patch
+https://github.com/Warbo/feed2maildir/pull/2.diff
+
+--
+You are receiving this because you are subscribed to this thread.
+Reply to this email directly or view it on GitHub:
+https://github.com/Warbo/feed2maildir/pull/2
+
+----==_mimepart_5bf85bed59464_3d133fb6898d45bc19371a
+Content-Type: text/html;
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<p>My email client (alpine) did not like the dates in these resulting emails.</p>
+<p>So the first thing I did was go check what the maildir files contained.</p>
+<p>Right off, and even before looking into the file contents, I noticed the maildir file names were not really consistent with the <a href="https://cr.yp.to/proto/maildir.html" rel="nofollow">maildir recommendation</a>. So I changed that.</p>
+<p>But it didn't fix it. Then looking at the file contents, the email date header wasn't <a href="https://tools.ietf.org/html/rfc5322#section-3.3" rel="nofollow">RFC complient</a>. So I changed that, and it fixed it.</p>
+<p>PS love the fork. Nice and modular :) Thanks!</p>
+
+<hr>
+
+<h4>You can view, comment on, or merge this pull request online at:</h4>
+<p>&nbsp;&nbsp;<a href='https://github.com/Warbo/feed2maildir/pull/2'>https://github.com/Warbo/feed2maildir/pull/2</a></p>
+
+<h4>Commit Summary</h4>
+<ul>
+  <li>[feed2maildir] RFC5322 date in email header. Better maildir naming conformance.</li>
+</ul>
+
+<h4>File Changes</h4>
+<ul>
+  <li>
+    <strong>M</strong>
+    <a href="https://github.com/Warbo/feed2maildir/pull/2/files#diff-0">feed2maildir/converter.py</a>
+    (11)
+  </li>
+</ul>
+
+<h4>Patch Links:</h4>
+<ul>
+  <li><a href='https://github.com/Warbo/feed2maildir/pull/2.patch'>https://github.com/Warbo/feed2maildir/pull/2.patch</a></li>
+  <li><a href='https://github.com/Warbo/feed2maildir/pull/2.diff'>https://github.com/Warbo/feed2maildir/pull/2.diff</a></li>
+</ul>
+
+<p style="font-size:small;-webkit-text-size-adjust:none;color:#666;">&mdash;<br />You are receiving this because you are subscribed to this thread.<br />Reply to this email directly, <a href="https://github.com/Warbo/feed2maildir/pull/2">view it on GitHub</a>, or <a href="https://github.com/notifications/unsubscribe-auth/AABtCWIQMBHqYbgpDAOwH3ApjwQ1-us1ks5uyFNtgaJpZM4YxFBd">mute the thread</a>.<img src="https://github.com/notifications/beacon/AABtCYOChEObu6ls00GhNO6MBm8cvGkDks5uyFNtgaJpZM4YxFBd.gif" height="1" width="1" alt="" /></p>
+<script type="application/json" data-scope="inboxmarkup">{"api_version":"1.0","publisher":{"api_key":"05dde50f1d1a384dd78767c55493e4bb","name":"GitHub"},"entity":{"external_key":"github/Warbo/feed2maildir","title":"Warbo/feed2maildir","subtitle":"GitHub repository","main_image_url":"https://assets-cdn.github.com/images/email/message_cards/header.png","avatar_image_url":"https://assets-cdn.github.com/images/email/message_cards/avatar.png","action":{"name":"Open in GitHub","url":"https://github.com/Warbo/feed2maildir"}},"updates":{"snippets":[{"icon":"DESCRIPTION","message":"RFC5322 date in email header. Better maildir naming conformance. (#2)"}],"action":{"name":"View Pull Request","url":"https://github.com/Warbo/feed2maildir/pull/2"}}}</script>
+<script type="application/ld+json">[
+{
+"@context": "http://schema.org",
+"@type": "EmailMessage",
+"potentialAction": {
+"@type": "ViewAction",
+"target": "https://github.com/Warbo/feed2maildir/pull/2",
+"url": "https://github.com/Warbo/feed2maildir/pull/2",
+"name": "View Pull Request"
+},
+"description": "View this Pull Request on GitHub",
+"publisher": {
+"@type": "Organization",
+"name": "GitHub",
+"url": "https://github.com"
+}
+},
+{
+"@type": "MessageCard",
+"@context": "http://schema.org/extensions",
+"hideOriginalBody": "false",
+"originator": "AF6C5A86-E920-430C-9C59-A73278B5EFEB",
+"title": "RFC5322 date in email header. Better maildir naming conformance. (#2)",
+"sections": [
+{
+"text": "",
+"activityTitle": "**Billy Brumley**",
+"activityImage": "https://assets-cdn.github.com/images/email/message_cards/avatar.png",
+"activitySubtitle": "@bbbrumley",
+"facts": [
+
+]
+},
+{
+"title": "Commit Summary",
+"facts": [
+{
+"name": "ef162d6",
+"value": "[feed2maildir] RFC5322 date in email header. Better maildir naming conformance."
+}
+]
+},
+{
+"title": "File Changes",
+"facts": [
+{
+"name": "Modified",
+"value": "[feed2maildir/converter.py](https://github.com/Warbo/feed2maildir/pull/2/files#diff-0) (11 changes)"
+}
+]
+}
+],
+"potentialAction": [
+{
+"name": "Add a comment",
+"@type": "ActionCard",
+"inputs": [
+{
+"isMultiLine": true,
+"@type": "TextInput",
+"id": "IssueComment",
+"isRequired": false
+}
+],
+"actions": [
+{
+"name": "Comment",
+"@type": "HttpPOST",
+"target": "https://api.github.com",
+"body": "{\n\"commandName\": \"IssueComment\",\n\"repositoryFullName\": \"Warbo/feed2maildir\",\n\"issueId\": 2,\n\"IssueComment\": \"{{IssueComment.value}}\"\n}"
+}
+]
+},
+{
+"name": "Close pull request",
+"@type": "HttpPOST",
+"target": "https://api.github.com",
+"body": "{\n\"commandName\": \"PullRequestClose\",\n\"repositoryFullName\": \"Warbo/feed2maildir\",\n\"pullRequestId\": 2\n}"
+},
+{
+"targets": [
+{
+"os": "default",
+"uri": "https://github.com/Warbo/feed2maildir/pull/2"
+}
+],
+"@type": "OpenUri",
+"name": "View on GitHub"
+},
+{
+"targets": [
+{
+"os": "default",
+"uri": "https://github.com/Warbo/feed2maildir/pull/2.patch"
+}
+],
+"@type": "OpenUri",
+"name": "View patch"
+},
+{
+"targets": [
+{
+"os": "default",
+"uri": "https://github.com/Warbo/feed2maildir/pull/2.diff"
+}
+],
+"@type": "OpenUri",
+"name": "View diff"
+},
+{
+"name": "Unsubscribe",
+"@type": "HttpPOST",
+"target": "https://api.github.com",
+"body": "{\n\"commandName\": \"MuteNotification\",\n\"threadId\": 415518813\n}"
+}
+],
+"themeColor": "26292E"
+}
+]</script>
+
+----==_mimepart_5bf85bed59464_3d133fb6898d45bc19371a--
