@@ -1,0 +1,9 @@
+From: Chris Warburton
+Date: Mon, 26 Nov 2018 19:02:58 +0000
+Subject: Re: [Warbo/feed2maildir] RFC5322 date in email header. Better maildir
+ naming conformance. (#2)
+Message-Id: <99c47dba979cc8e0-823f8efeef22d9f0-artemis@nixos>
+References: <99c47dba979cc8e0-0-artemis@nixos>
+In-Reply-To: <99c47dba979cc8e0-0-artemis@nixos>
+
+Fixed by patch/commit 9b78f1c
